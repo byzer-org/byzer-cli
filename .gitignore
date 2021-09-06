@@ -3,3 +3,4 @@ mlsql
 dev.sh
 mlsql-darwin-amd64
 mlsql-linux-amd64
+mlsql-windows-amd64.exe

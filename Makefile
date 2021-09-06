@@ -19,11 +19,14 @@ ifdef STATIC
 	export CC
 endif
 
-release: linux mac
+release: linux mac windows
 
 linux: Makefile cmd/*.go pkg/*/*.go
 	env GOOS=linux GOARCH=amd64  go build -ldflags="$(LDFLAGS)"  -o mlsql-linux-amd64 ./cmd
 
 mac:
 	env GOOS=darwin GOARCH=amd64  go build -ldflags="$(LDFLAGS)"  -o mlsql-darwin-amd64 ./cmd
+
+windows:
+	env GOOS=windows GOARCH=amd64  go build -ldflags="$(LDFLAGS)"  -o mlsql-windows-amd64.exe ./cmd
 
