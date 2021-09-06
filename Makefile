@@ -1,6 +1,6 @@
 export GO111MODULE=on
 
-all: mlsql release
+all: release
 
 REVISION := $(shell git rev-parse --short HEAD 2>/dev/null)
 REVISIONDATE := $(shell git log -1 --pretty=format:'%ad' --date short 2>/dev/null)
@@ -19,9 +19,11 @@ ifdef STATIC
 	export CC
 endif
 
-mlsql: Makefile cmd/*.go pkg/*/*.go
-	go build -ldflags="$(LDFLAGS)"  -o mlsql ./cmd
+release: linux mac
 
-release:
-	cp ./mlsql /Users/allwefantasy/projects/mlsql/src/mlsql-lang/mlsql-app_2.4-2.1.0-SNAPSHOT/bin/
+linux: Makefile cmd/*.go pkg/*/*.go
+	env GOOS=linux GOARCH=amd64  go build -ldflags="$(LDFLAGS)"  -o mlsql-linux-amd64 ./cmd
+
+mac:
+	env GOOS=darwin GOARCH=amd64  go build -ldflags="$(LDFLAGS)"  -o mlsql-darwin-amd64 ./cmd
 

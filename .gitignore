@@ -1,2 +1,5 @@
 mlsql
 .idea
+dev.sh
+mlsql-darwin-amd64
+mlsql-linux-amd64

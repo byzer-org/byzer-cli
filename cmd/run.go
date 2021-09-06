@@ -76,7 +76,7 @@ func run(c *cli.Context) error {
 		"-streaming.datalake.path", "./data/",
 		"-streaming.driver.port", "9003",
 		"-streaming.plugin.clzznames", "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.shell.app.MLSQLShell",
-		"-streaming.runtime_hooks", "tech.mlsql.runtime.SparkSubmitMLSQLScriptRuntimeLifecycle",
+		"-streaming.platform_hooks", "tech.mlsql.runtime.SparkSubmitMLSQLScriptRuntimeLifecycle",
 		"-streaming.mlsql.script.path", c.Args().First(),
 		"-streaming.mlsql.script.owner", owner,
 		"-streaming.mlsql.sctipt.jobName", "mlsql-cli",
