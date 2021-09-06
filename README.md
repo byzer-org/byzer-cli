@@ -14,9 +14,9 @@ Copy to MLSQL lang distribution bin directory.
 
 First, set MLSQL_HOME
 
-> Download mlsql lang:
-> [mlsql lang mac](http://download.mlsql.tech/mlsql-lang-darwin-amd64.tar.gz)
-> [mlsql lang linux](http://download.mlsql.tech/mlsql-lang-linux-amd64.tar.gz)
+Download mlsql lang:
+1. [mlsql lang mac](http://download.mlsql.tech/mlsql-lang-darwin-amd64.tar.gz)
+2. [mlsql lang linux](http://download.mlsql.tech/mlsql-lang-linux-amd64.tar.gz)
 
 ```
 export MLSQL_HOME=....
