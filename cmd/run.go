@@ -81,7 +81,7 @@ func run(c *cli.Context) error {
 		"-streaming.platform", "spark",
 		"-streaming.spark.service", "false",
 		"-streaming.job.cancel", "true",
-		"-streaming.datalake.path", "./data/",
+		"-streaming.datalake.path", path.Join(".", "data"),
 		"-streaming.driver.port", "9003",
 		"-streaming.plugin.clzznames", "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.assert.app.MLSQLAssert",
 		"-streaming.platform_hooks", "tech.mlsql.runtime.SparkSubmitMLSQLScriptRuntimeLifecycle",
