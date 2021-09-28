@@ -21,7 +21,14 @@ func run(c *cli.Context) error {
 	}
 	mlsqlHome := filepath.Dir(filepath.Dir(_mlsqlHome))
 
-	javaHome := os.Getenv("JAVA_HOME")
+	var javaHome = os.Getenv("JAVA_HOME")
+
+	if javaHome == "" {
+		if _, err := os.Stat(path.Join(mlsqlHome, "jdk8")); !os.IsNotExist(err) {
+			javaHome = path.Join(mlsqlHome, "jdk8")
+		}
+	}
+
 	var mlsqlConfig = make(map[string]string)
 	mlsqlConfigStr, err := os.ReadFile(".mlsql.config")
 	if err == nil {
@@ -51,6 +58,7 @@ func run(c *cli.Context) error {
 	}
 
 	var executable = "java"
+
 	if javaHome != "" {
 		executable = path.Join(javaHome, "bin", "java")
 	}
@@ -75,7 +83,7 @@ func run(c *cli.Context) error {
 		"-streaming.job.cancel", "true",
 		"-streaming.datalake.path", "./data/",
 		"-streaming.driver.port", "9003",
-		"-streaming.plugin.clzznames", "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.shell.app.MLSQLShell",
+		"-streaming.plugin.clzznames", "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.assert.app.MLSQLAssert",
 		"-streaming.platform_hooks", "tech.mlsql.runtime.SparkSubmitMLSQLScriptRuntimeLifecycle",
 		"-streaming.mlsql.script.path", c.Args().First(),
 		"-streaming.mlsql.script.owner", owner,
