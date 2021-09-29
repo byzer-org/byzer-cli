@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -59,8 +60,14 @@ func run(c *cli.Context) error {
 
 	var executable = "java"
 
+	var javaName = "java"
+
+    if runtime.GOOS == "windows" {
+		javaName = "java.exe"
+	}
+
 	if javaHome != "" {
-		executable = path.Join(javaHome, "bin", "java")
+		executable = path.Join(javaHome, "bin", javaName)
 	}
 
 	mainLib := path.Join(mlsqlHome, "main", "*")
