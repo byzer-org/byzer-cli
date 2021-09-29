@@ -61,9 +61,11 @@ func run(c *cli.Context) error {
 	var executable = "java"
 
 	var javaName = "java"
+	var classPathSeperator = ":"
 
-    if runtime.GOOS == "windows" {
+	if runtime.GOOS == "windows" {
 		javaName = "java.exe"
+		classPathSeperator = ";"
 	}
 
 	if javaHome != "" {
@@ -79,7 +81,7 @@ func run(c *cli.Context) error {
 
 	var command = []string{
 		"-cp",
-		fmt.Sprintf("%s:%s:%s:%s", mainLib, libsLib, pluginLib, sparkLib),
+		fmt.Sprintf("%s%s%s%s%s%s%s", mainLib, classPathSeperator, libsLib, classPathSeperator, pluginLib, classPathSeperator, sparkLib),
 		mainClass,
 		"-streaming.master", "local[*]",
 		"-streaming.name", "MLSQL-desktop",
