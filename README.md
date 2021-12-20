@@ -1,6 +1,6 @@
-## MLSQL Lang Cli
+## Byzer Cli
 
-mlsql lang command line.
+Command line interface of Byzer-lang
 
 ## Build
 
@@ -10,7 +10,7 @@ make all
 
 ## Run
 
-Copy to MLSQL lang distribution bin directory. 
+Copy to Byzer-lang distribution bin directory. 
 
 First, set MLSQL_HOME
 
