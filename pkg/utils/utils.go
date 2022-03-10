@@ -26,3 +26,20 @@ func BuildJsonQueryFromStr(jsonStr string) *jsonq.JsonQuery {
 	return jq
 
 }
+
+func ArrayToMap(elements []string) map[string]string {
+	elementMap := make(map[string]string)
+	for i := 0; i < len(elements); i += 2 {
+		elementMap[elements[i]] = elements[i+1]
+	}
+	return elementMap
+}
+
+func MapToArray(elementMap map[string]string) []string {
+	var elements []string
+	for k, v := range elementMap {
+		elements = append(elements, k)
+		elements = append(elements, v)
+	}
+	return elements
+}

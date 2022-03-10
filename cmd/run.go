@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/urfave/cli/v2"
+	"mlsql.tech/allwefantasy/mlsql-lang-cli/pkg/utils"
 	"os"
 	"os/exec"
 	"path"
@@ -14,6 +15,11 @@ import (
 func run(c *cli.Context) error {
 	if c.Args().Len() != 1 {
 		logger.Fatalf("mlsql run script-path")
+	}
+
+	var configFile = ".mlsql.config"
+	if c.IsSet("conf") {
+		configFile = c.String("conf")
 	}
 
 	_mlsqlHome, err := os.Executable()
@@ -31,7 +37,12 @@ func run(c *cli.Context) error {
 	}
 
 	var mlsqlConfig = make(map[string]string)
-	mlsqlConfigStr, err := os.ReadFile(".mlsql.config")
+	mlsqlConfigStr, err := os.ReadFile(configFile)
+
+	if c.IsSet("conf") && err != nil {
+		panic(err)
+	}
+
 	if err == nil {
 		for _, _s := range strings.Split(string(mlsqlConfigStr), "\n") {
 			s := strings.TrimSpace(_s)
@@ -79,12 +90,8 @@ func run(c *cli.Context) error {
 
 	const mainClass = "streaming.core.StreamingApp"
 
-	var command = []string{
-		"-cp",
-		fmt.Sprintf("%s%s%s%s%s%s%s", mainLib, classPathSeperator, libsLib, classPathSeperator, pluginLib, classPathSeperator, sparkLib),
-		mainClass,
-		"-streaming.master", "local[*]",
-		"-streaming.name", "MLSQL-desktop",
+	defaultConfigArray := []string{"-streaming.master", "local[*]",
+		"-streaming.name", "Byzer-cli",
 		"-streaming.rest", "false",
 		"-streaming.thrift", "false",
 		"-streaming.platform", "spark",
@@ -96,8 +103,33 @@ func run(c *cli.Context) error {
 		"-streaming.platform_hooks", "tech.mlsql.runtime.SparkSubmitMLSQLScriptRuntimeLifecycle",
 		"-streaming.mlsql.script.path", c.Args().First(),
 		"-streaming.mlsql.script.owner", owner,
-		"-streaming.mlsql.sctipt.jobName", "mlsql-cli",
+		"-streaming.mlsql.sctipt.jobName", "mlsql-cli"}
+
+	var defaultConfig = utils.ArrayToMap(defaultConfigArray)
+
+	for k, v := range mlsqlConfig {
+		if strings.HasPrefix(k, "engine.spark") || strings.HasPrefix(k, "engine.streaming") {
+			// streaming.plugin.clzznames
+			// streaming.platform_hooks
+			if k == "engine.streaming.plugin.clzznames" {
+				defaultConfig["-streaming.plugin.clzznames"] = defaultConfig["-streaming.plugin.clzznames"] + "," + v
+			} else if k == "engine.streaming.platform_hooks" {
+				defaultConfig["-streaming.platform_hooks"] = defaultConfig["-streaming.platform_hooks"] + "," + v
+			} else {
+				defaultConfig["-"+strings.TrimPrefix(k, "engine.")] = v
+			}
+		}
 	}
+
+	finalConfig := utils.MapToArray(defaultConfig)
+
+	var command = []string{
+		"-cp",
+		fmt.Sprintf("%s%s%s%s%s%s%s", mainLib, classPathSeperator, libsLib, classPathSeperator, pluginLib, classPathSeperator, sparkLib),
+		mainClass,
+	}
+
+	command = append(command, finalConfig...)
 
 	if xmx != "" {
 		command = append([]string{xmx}, command...)
@@ -124,7 +156,13 @@ func runFlags() *cli.Command {
 		Usage:     "run mlsql lang script",
 		ArgsUsage: "script path",
 		Action:    run,
-		Flags:     []cli.Flag{},
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     "conf",
+				Usage:    "specify config file name",
+				Required: false,
+			},
+		},
 	}
 	return cmd
 }
