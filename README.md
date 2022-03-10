@@ -10,26 +10,28 @@ make all
 
 ## Run
 
-Copy to Byzer-lang distribution bin directory. 
-
-First, set MLSQL_HOME
-
-Download mlsql lang:
-1. [mlsql lang mac](https://mlsql-downloads.kyligence.io/2.1.0/mlsql-app_2.4-2.1.0-darwin-amd64.tar.gz)
-2. [mlsql lang linux](https://mlsql-downloads.kyligence.io/2.1.0/mlsql-app_2.4-2.1.0-linux-amd64.tar.gz)
+You can run Byzer-lang script like this:
 
 ```
-export MLSQL_HOME=....
+byzer run  test.by
 ```
 
-Second, set PATH
+By default ,it will search config file `.mlsql.config` in current path.
+
+You can also specify the file path with flag `-conf /tmp/.byzer.config`
+
+## .mlsql.config
 
 ```
-export PATH=${MLSQL_HOME}/bin:$PATH
+# Engine memory
+engine.memory=6048m
+
+# Byzer config
+engine.streaming.spark.service=false
+
+# Runtime config
+engine.spark.shuffle.spill.batchSize=1000
 ```
 
-Third, run mlsql script
 
-```
-mlsql run ./src/common/hello.mlsql
-```
+
