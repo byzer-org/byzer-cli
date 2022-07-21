@@ -32,7 +32,11 @@ func run(c *cli.Context) error {
 
 	if javaHome == "" {
 		if _, err := os.Stat(path.Join(mlsqlHome, "jdk8")); !os.IsNotExist(err) {
-			javaHome = path.Join(mlsqlHome, "jdk8")
+		    if ( "darwin" == runtime.GOOS ) {
+		        javaHome = path.Join(mlsqlHome, "jdk8/Contents/Home")
+		    } else {
+			    javaHome = path.Join(mlsqlHome, "jdk8")
+			}
 		}
 	}
 
